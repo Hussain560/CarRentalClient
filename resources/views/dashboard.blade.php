@@ -772,14 +772,28 @@
                 
                 if (!car || typeof car !== 'object') {
                     throw new Error('Invalid car data received');
-                }
-                
-                // Populate form fields
+                }                // Populate form fields in the correct order
                 document.getElementById('edit-car-id').value = car.id;
-                document.getElementById('edit-brand').value = car.brand || '';
+                
+                // First initialize the brand dropdown
+                initializeEditBrandDropdown();
+                
+                // Set the brand and wait for next frame to ensure options are populated
+                const brandSelect = document.getElementById('edit-brand');
+                brandSelect.value = car.brand || '';
+                
+                // Update models dropdown based on selected brand
                 updateEditModels(car.brand);
-                document.getElementById('edit-model').value = car.model || '';
-                updateEditCategory(car.brand, car.model);
+                
+                // Set the model value after models dropdown is populated
+                const modelSelect = document.getElementById('edit-model');
+                setTimeout(() => {
+                    modelSelect.value = car.model || '';
+                    // Update category after both brand and model are set
+                    updateEditCategory(car.brand, car.model);
+                }, 0);
+                
+                // Set remaining fields
                 document.getElementById('edit-year').value = car.year || '';
                 document.getElementById('edit-price').value = car.price_per_day || '';
                 document.getElementById('edit-available').checked = Boolean(car.is_available);
