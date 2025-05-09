@@ -204,6 +204,9 @@
             </div>
         </div>
     </div>    <script>
+        // API base URL
+        const API_BASE_URL = 'http://74.162.40.229';
+        
         // Modals
         const viewModal = new bootstrap.Modal(document.getElementById('viewCarModal'));
         const editModal = new bootstrap.Modal(document.getElementById('editCarModal'));
@@ -507,7 +510,7 @@
             carsGrid.style.display = 'none';try {
                 const controller = new AbortController();
                 const timeoutId = setTimeout(() => controller.abort(), 20000); // 20 second timeout with retry                let response;
-                const apiUrl = 'http://127.0.0.1:8000/api/cars';
+                const apiUrl = `${API_BASE_URL}/api/cars`;
                 console.log('Making API request to:', apiUrl); // Debug URL
                 
                 try {
@@ -528,7 +531,7 @@
                         const retryController = new AbortController();
                         const retryTimeoutId = setTimeout(() => retryController.abort(), 20000);
                         
-                        response = await fetch('http://127.0.0.1:8000/api/cars', {
+                        response = await fetch(`${API_BASE_URL}/api/cars`, {
                             headers: {
                                 'Authorization': `Bearer ${token}`,
                                 'Content-Type': 'application/json',
@@ -658,7 +661,7 @@
                 viewCarDetails.innerHTML = '<div class="text-center"><div class="spinner-border"></div><p>Loading...</p></div>';
                 viewModal.show();
 
-                const response = await fetch(`http://127.0.0.1:8000/api/cars/${id}`, {
+                const response = await fetch(`${API_BASE_URL}/api/cars/${id}`, {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'Accept': 'application/json'
@@ -750,7 +753,7 @@
                 formContent.insertAdjacentHTML('afterbegin', '<div id="edit-loading" class="text-center mb-3"><div class="spinner-border"></div></div>');
                 editModal.show();
 
-                const response = await fetch(`http://127.0.0.1:8000/api/cars/${id}`, {
+                const response = await fetch(`${API_BASE_URL}/api/cars/${id}`, {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'Accept': 'application/json'
@@ -856,7 +859,7 @@
                     }
                 }
 
-                const response = await fetch(`http://127.0.0.1:8000/api/cars/${currentCarId}`, {
+                const response = await fetch(`${API_BASE_URL}/api/cars/${currentCarId}`, {
                     method: 'PUT',
                     headers: {
                         'Authorization': `Bearer ${token}`,
@@ -904,7 +907,7 @@
                 deleteButton.disabled = true;
                 deleteButton.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>Deleting...';
 
-                const response = await fetch(`http://127.0.0.1:8000/api/cars/${currentCarId}`, {
+                const response = await fetch(`${API_BASE_URL}/api/cars/${currentCarId}`, {
                     method: 'DELETE',
                     headers: {
                         'Authorization': `Bearer ${token}`,
@@ -954,7 +957,7 @@
                 viewCarDetails.innerHTML = '<div class="text-center"><div class="spinner-border"></div><p>Loading...</p></div>';
                 viewModal.show();
 
-                const response = await fetch(`http://127.0.0.1:8000/api/cars/${carId}`, {
+                const response = await fetch(`${API_BASE_URL}/api/cars/${carId}`, {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'Accept': 'application/json'
