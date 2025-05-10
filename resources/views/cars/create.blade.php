@@ -421,7 +421,7 @@
             errorMessageDiv.style.display = 'none';
 
             try {
-                const response = await fetch('http://74.243.216.220/api/cars', {
+                const response = await fetch('http://20.174.18.154/api/cars', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

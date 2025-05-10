@@ -62,7 +62,7 @@
             const errorDiv = document.getElementById('error-message');
 
             try {
-                const response = await fetch('http://74.243.216.220/api/login', {
+                const response = await fetch('http://20.174.18.154/api/login', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

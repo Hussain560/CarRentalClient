@@ -1,61 +1,149 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# CarRentalClient
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A comprehensive web application for managing car rentals, built with Laravel. This front-end interface is one component of a two-part system:
+- **CarRentalClient**: Frontend web interface (this repository)
+- **CarRentalAPI**: Backend REST API service
 
-## About Laravel
+## Project Overview
+The CarRentalClient application provides a user-friendly interface for managing car rentals, featuring a responsive dashboard, authentication system, and complete car management functionality.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Production Environment
+- **Client URL:** http://74.243.216.220
+- **API Endpoint:** http://20.174.18.154/api/*
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Description
+CarRentalClient serves as the front-end interface for a car rental system, providing a user-friendly platform for both customers and administrators. The application integrates with CarRentalAPI for data management and authentication services.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Key Features
+- User authentication (login/register)
+- Interactive dashboard with car grid display
+- Complete CRUD operations for car management
+- Search functionality by car ID
+- Responsive design with Tailwind CSS
+- Real-time loading states and error handling
+- Price display in Saudi Riyal (SAR)
 
-## Learning Laravel
+## Technology Stack
+- **Framework:** Laravel 10.x
+- **PHP Version:** 8.4.7
+- **Frontend:** 
+  - Blade templating
+  - JavaScript/Axios
+- **Server:** Apache 2.4.58 on Ubuntu 22.04
+- **Authentication:** Laravel Sanctum
+- **Development Tools:** Composer
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Local Setup
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+1. Clone the repository:
+```bash
+git clone [repository-url]
+cd CarRentalClient
+```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+2. Install dependencies:
+```bash
+composer install
+```
 
-## Laravel Sponsors
+3. Configure environment:
+```bash
+cp .env.example .env
+php artisan key:generate
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+4. Update `.env` with API settings:
+```
+API_BASE_URL=http://20.174.18.154/api
+```
 
-### Premium Partners
+## Detailed Project Structure
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development/)**
-- **[Active Logic](https://activelogic.com)**
+### Routes Configuration (routes/web.php)
+```php
+Route::get('/', fn() => redirect('/login'));
+Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [AuthController::class, 'login']);
+Route::get('/register', [AuthController::class, 'showRegisterForm']);
+Route::post('/register', [AuthController::class, 'register']);
 
-## Contributing
+Route::middleware('auth')->group(function () {
+    Route::get('/dashboard', [CarController::class, 'index'])->name('dashboard');
+    Route::resource('cars', CarController::class);
+    Route::get('/search', [CarController::class, 'search']);
+});
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### Core Components
 
-## Code of Conduct
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+#### Views Structure
+```
+resources/views/
+├── layouts/
+│   └── app.blade.php       # Base layout template
+├── auth/
+│   ├── login.blade.php     # Login form
+│   └── register.blade.php  # Registration form
+├── cars/
+│   ├── index.blade.php     # Car listing/grid
+│   ├── create.blade.php    # Add new car form
+│   └── edit.blade.php      # Edit car form
+└── dashboard.blade.php     # Main dashboard
+```
 
-## Security Vulnerabilities
+## API Integration
+```javascript
+// Example API call using Axios
+const response = await axios.get(`${API_BASE_URL}/cars`, {
+    headers: {
+        'Authorization': `Bearer ${token}`,
+        'Accept': 'application/json'
+    }
+});
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## Deployment Configuration
+```apache
+# Apache Virtual Host Configuration
+<VirtualHost *:80>
+    ServerName 74.243.216.220
+    DocumentRoot /var/www/html/rentals/public
+    
+    <Directory /var/www/html/rentals/public>
+        Options Indexes FollowSymLinks
+        AllowOverride All
+        Require all granted
+    </Directory>
 
-## License
+    ErrorLog ${APACHE_LOG_DIR}/carrentalclient_error.log
+    CustomLog ${APACHE_LOG_DIR}/carrentalclient_access.log combined
+</VirtualHost>
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Testing Instructions
+
+### Local Environment
+1. Start local server:
+```bash
+php artisan serve
+```
+2. Access http://localhost:8000
+3. Test features:
+   - User registration/login
+   - Car management (CRUD)
+   - Search functionality
+   - Responsive design
+
+### Production Environment
+1. Visit http://74.243.216.220
+2. Test with provided credentials or register new account
+3. Verify all features work with the production API
+
+
+## License and Academic Context
+This project is developed as part of the Web-Based Systems (IS-314) course at KFU. All rights reserved.
+- **Course**: IS-314 Web-Based Systems
+- **Institution**: King Faisal University
+- **Year**: 2025
+
