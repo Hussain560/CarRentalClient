@@ -205,7 +205,7 @@
         </div>
     </div>    <script>
         // API base URL
-        const API_BASE_URL = 'http://74.162.40.229';
+        const API_BASE_URL = 'http://74.243.216.220';
         
         // Modals
         const viewModal = new bootstrap.Modal(document.getElementById('viewCarModal'));
